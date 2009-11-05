@@ -2,7 +2,10 @@ package org.hibernate.example.compositeid;
 
 import java.io.Serializable;
 
-public class CompositeId implements Serializable {
+/**
+ * Composite identity for {@link EntityWithCompositeId}.
+ */
+public final class CompositeId implements Serializable {
     private Long id1;
     private Long id2;
 

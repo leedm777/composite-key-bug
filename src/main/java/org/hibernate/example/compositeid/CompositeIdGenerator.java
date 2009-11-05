@@ -13,19 +13,27 @@ import org.hibernate.type.Type;
 import java.io.Serializable;
 import java.util.Properties;
 
+/**
+ * Identity generator for {@link CompositeId}.
+ */
 public class CompositeIdGenerator implements PersistentIdentifierGenerator, Configurable {
+    /**
+     * Real work done by the {@link SequenceStyleGenerator}.
+     */
     private SequenceStyleGenerator realGenerator = new SequenceStyleGenerator();
 
     @Override
     public void configure(Type type, Properties params, Dialect dialect) throws MappingException {
         // The real generator will generate longs for us
-        realGenerator.configure(new LongType(), params, dialect);
+        type = new LongType();
+        realGenerator.configure(type, params, dialect);
     }
 
     @Override
     public Serializable generate(SessionImplementor session, Object object) throws HibernateException {
         // This is just a stupid example, so I just need some sort of
-        // composite key
+        // composite key.  A less stupid example would generate both id1 and
+        // id2.
         Serializable realKey = realGenerator.generate(session, null);
         return new CompositeId(1L, (Long)realKey);
     }

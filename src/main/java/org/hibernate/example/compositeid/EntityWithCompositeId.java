@@ -1,5 +1,8 @@
 package org.hibernate.example.compositeid;
 
+/**
+ * Persistent entity with a composite identity ({@link #id1} and {@link #id2}).
+ */
 public class EntityWithCompositeId {
     private Long id1;
     private Long id2;

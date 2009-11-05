@@ -14,7 +14,9 @@ import java.sql.SQLException;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-
+/**
+ * Unit tests demonstrating my confusion.
+ */
 public class EntityTest {
     private SessionFactory sessionFactory;
     private Session session;
@@ -24,6 +26,7 @@ public class EntityTest {
         sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .configure("hibernate-test.cfg.xml")
+                .configure("hibernate-hsqldb.cfg.xml")
                 .setNamingStrategy(new ImprovedNamingStrategy())
                 .buildSessionFactory();
         session = sessionFactory.openSession();
@@ -45,6 +48,9 @@ public class EntityTest {
     public void testSimpleSave() {
         EntityWithCompositeId objectToSave = new EntityWithCompositeId();
         Serializable id = session.save(objectToSave);
+        // flush fails with:
+        // identifier of an instance of org.hibernate.example.compositeid.EntityWithCompositeId was altered from CompositeId{id1=1, id2=1} to CompositeId{id1=null, id2=null}
+        // actually, id in objectToSave was never updates to the generated id
         session.flush();
         assertThat("Should have been a CompositeId", id, is(instanceOf(CompositeId.class)));
         CompositeId compositeId = (CompositeId) id;
@@ -56,6 +62,7 @@ public class EntityTest {
     public void testSimpleSubclassSave() {
         SubclassWithCompositeId objectToSave = new SubclassWithCompositeId();
         Serializable id = session.save(objectToSave);
+        // flush succeeds, even though it fails in the above test.
         session.flush();
         assertThat("Should have been a CompositeId", id, is(instanceOf(CompositeId.class)));
         CompositeId compositeId = (CompositeId) id;
