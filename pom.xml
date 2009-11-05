@@ -1,0 +1,172 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.hibernate.example</groupId>
+    <artifactId>composite-key</artifactId>
+    <packaging>jar</packaging>
+    <version>0.1-SNAPSHOT</version>
+    <name>composite-key</name>
+
+    <description>Demonstration of problems with using composite keys.</description>
+
+    <distributionManagement>
+        <repository>
+            <id>local</id>
+            <name>Local Deploy Repo</name>
+            <url>file://${basedir}/target/repo</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>3.3.2.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-annotations</artifactId>
+            <version>3.4.0.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.8.0.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.6</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                        <!-- include the site:jar in the deployment -->
+                        <goals>site:jar deploy</goals>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <!--
+                          -  ignore unit test failures.  that's how I
+                          -  demonstrate the diamond problem
+                          -->
+                        <testFailureIgnore>true</testFailureIgnore>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <!--<report>cim</report>-->
+                            <!--<report>dependencies</report>-->
+                            <!--<report>dependency-convergence</report>-->
+                            <!--<report>dependency-management</report>-->
+                            <report>help</report>
+                            <report>index</report>
+                            <!--<report>issue-tracking</report>-->
+                            <!--<report>license</report>-->
+                            <!--<report>mailing-list</report>-->
+                            <report>plugin-management</report>
+                            <report>plugins</report>
+                            <!--<report>project-team</report>-->
+                            <report>scm</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <!--<doctitle>${project.groupId}:${project.artifactId}:${project.version}</doctitle>-->
+                    <!--<windowtitle>${project.groupId}:${project.artifactId}:${project.version}</windowtitle>-->
+                    <quiet>true</quiet>
+                    <offlineLinks>
+                        <offlineLink>
+                            <url>http://java.sun.com/javase/6/docs/api/</url>
+                            <location>${basedir}/etc/javadoc/javase6/</location>
+                        </offlineLink>
+                        <offlineLink>
+                            <url>https://www.hibernate.org/hib_docs/v3/api/</url>
+                            <location>${basedir}/etc/javadoc/hibernate3/</location>
+                        </offlineLink>
+                        <offlineLink>
+                            <url>http://static.springsource.org/spring/docs/2.5.x/api/index</url>
+                            <location>${basedir}/etc/javadoc/spring-2.5.x</location>
+                        </offlineLink>
+                        <offlineLink>
+                            <url>http://junit.sourceforge.net/javadoc/</url>
+                            <location>${basedir}/etc/javadoc/junit</location>
+                        </offlineLink>
+                        <offlineLink>
+                            <url>http://unitils.sourceforge.net/apidocs/</url>
+                            <location>${basedir}/etc/javadoc/unitils</location>
+                        </offlineLink>
+                    </offlineLinks>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <id>javadocs</id>
+                        <reports>
+                            <report>javadoc</report>
+                            <report>test-javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.4.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>
