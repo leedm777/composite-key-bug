@@ -3,7 +3,7 @@
     <groupId>org.hibernate.example</groupId>
     <artifactId>composite-key</artifactId>
     <packaging>jar</packaging>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <name>composite-key</name>
 
     <description>Demonstration of problems with using composite keys.</description>
